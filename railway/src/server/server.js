@@ -75,7 +75,6 @@ app.get('/api/stations', async (req, res) => {
         },
         timeout: 15000
       });
-      console.log('Yandex API success:', response.data);
       res.json(response.data);
     } catch (error) {
       console.error('Ошибка при получении расписания:', error.message);
@@ -102,7 +101,7 @@ app.get('/api/stations', async (req, res) => {
         },
         timeout: 150000
       });
-  
+      console.log(response.data)
       res.json(response.data);
     } catch (error) {
       console.error('Ошибка при получении маршрута:', error.message);

@@ -32,11 +32,11 @@ h3 {
 }
 
 input {
-  width: 57%;
+  width: 60%;
   padding: 8px;
-  margin-bottom: 10px;
   border: none;
   border-radius: 4px;
+  margin-left: 10px;
 }
 
 .schedule-panel {
@@ -122,4 +122,46 @@ input {
   text-align: center;
   color: #ccc;
   font-style: italic;
+}
+
+/* Mobile адаптация */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    padding: 10px;
+    gap: 20px;
+  }
+
+  .panel {
+    width: 100%;
+  }
+
+  .search-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .autocomplete-wrapper,
+  .region-filter-wrapper {
+    width: 100%;
+  }
+
+  .styled-select {
+    width: 100%;
+  }
+
+  .search-btn {
+    width: 100%;
+  }
+
+  .station-list,
+  .route-results {
+    height: auto;
+    max-height: 400px;
+  }
+
+  .scrollable-table-body,
+  .route-table-scroll {
+    max-height: 300px;
+  }
 }

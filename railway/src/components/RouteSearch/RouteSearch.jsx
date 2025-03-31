@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
+import { useRef } from 'react';
 import './RouteSearch.css';
 
 function RouteSearch({ stations }) {
+  const scrollRef = useRef(null);
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
   const [routes, setRoutes] = useState([]);
@@ -18,14 +20,14 @@ function RouteSearch({ stations }) {
     const filtered = stations.filter(s =>
       s.title.toLowerCase().includes(from.toLowerCase())
     );
-    setMatchedFrom(filtered.slice(0, 5));
+    setMatchedFrom(filtered.slice(0, 3));
   }, [from, stations]);
 
   useEffect(() => {
     const filtered = stations.filter(s =>
       s.title.toLowerCase().includes(to.toLowerCase())
     );
-    setMatchedTo(filtered.slice(0, 5));
+    setMatchedTo(filtered.slice(0, 3));
   }, [to, stations]);
 
   const handleSearch = async () => {
@@ -54,64 +56,66 @@ function RouteSearch({ stations }) {
   };
 
   return (
-    <div className="route-search">
+    <> 
+    <div className="route-search" ref={scrollRef}>
       <h3>Расписание поездов между двумя станциями</h3>
 
-    <div className="search-row">
-    <div className="autocomplete-wrapper">
-        <h3>Откуда:</h3>
-        <input
-        type="text"
-        value={from}
-        onChange={(e) => {
-            setFrom(e.target.value);
-            setFromSuggestions(true);
-        }}
-        onBlur={() => setTimeout(() => setFromSuggestions(false), 200)}
-        onFocus={() => from && setFromSuggestions(true)}
-        />
-        {fromSuggestions && matchedFrom.length > 0 && (
-        <ul className="suggestions-list">
-            {matchedFrom.map((s, i) => (
-            <li key={i} onClick={() => {
-                setFrom(s.title);
-                setFromSuggestions(false);
-            }}>
-                {s.title} — {s.region}
-            </li>
-            ))}
-        </ul>
-        )}
-    </div>
+        <div className="search-row">
+        <div className="autocomplete-wrapper">
+            <h3>Откуда:</h3>
+            <input
+            type="text"
+            value={from}
+            onChange={(e) => {
+                setFrom(e.target.value);
+                setFromSuggestions(true);
+            }}
+            onBlur={() => setTimeout(() => setFromSuggestions(false), 200)}
+            onFocus={() => from && setFromSuggestions(true)}
+            />
+            {fromSuggestions && matchedFrom.length > 0 && (
+            <ul className="suggestions-list">
+                {matchedFrom.map((s, i) => (
+                <li key={i} onClick={() => {
+                    setFrom(s.title);
+                    setFromSuggestions(false);
+                }}>
+                    {s.title} — {s.region}
+                </li>
+                ))}
+            </ul>
+            )}
+        </div>
 
-    <div className="autocomplete-wrapper">
-        <h3>Куда:</h3>
-        <input
-        type="text"
-        value={to}
-        onChange={(e) => {
-            setTo(e.target.value);
-            setToSuggestions(true);
-        }}
-        onBlur={() => setTimeout(() => setToSuggestions(false), 200)}
-        onFocus={() => to && setToSuggestions(true)}
-        />
-        {toSuggestions && matchedTo.length > 0 && (
-        <ul className="suggestions-list">
-            {matchedTo.map((s, i) => (
-            <li key={i} onClick={() => {
-                setTo(s.title);
-                setToSuggestions(false);
-            }}>
-                {s.title} — {s.region}
-            </li>
-            ))}
-        </ul>
-        )}
-    </div>
+        <div className="autocomplete-wrapper">
+            <h3>Куда:</h3>
+            <input
+            type="text"
+            value={to}
+            onChange={(e) => {
+                setTo(e.target.value);
+                setToSuggestions(true);
+            }}
+            onBlur={() => setTimeout(() => setToSuggestions(false), 200)}
+            onFocus={() => to && setToSuggestions(true)}
+            />
+            {toSuggestions && matchedTo.length > 0 && (
+            <ul className="suggestions-list">
+                {matchedTo.map((s, i) => (
+                <li key={i} onClick={() => {
+                    setTo(s.title);
+                    setToSuggestions(false);
+                }}>
+                    {s.title} — {s.region}
+                </li>
+                ))}
+            </ul>
+            )}
+        </div>
 
-  <button className="search-btn" onClick={handleSearch}>Найти</button>
-</div>
+        <button className="search-btn" onClick={handleSearch}>Найти</button>
+        </div>
+      </div>
 
       {loading && <p>Загрузка...</p>}
       
@@ -121,6 +125,7 @@ function RouteSearch({ stations }) {
       {routes.length > 0 && (
         <div className="route-results">
           <h3>Расписание поездов</h3>
+          <div className="route-table-scroll">
           <table>
             <thead>
               <tr>
@@ -141,9 +146,13 @@ function RouteSearch({ stations }) {
               ))}
             </tbody>
           </table>
+          </div>
+          
         </div>
       )}
-    </div>
+     
+    </>
+    
   );
 }
 
